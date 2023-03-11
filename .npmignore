@@ -11,3 +11,8 @@ yarn.lock
 .yarn
 __test__
 renovate.json
+.gitmodules
+.yarnrc.yml
+build.rs
+Cargo.toml
+src/lib.rs
