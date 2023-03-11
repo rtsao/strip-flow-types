@@ -580,26 +580,26 @@ test("Ported Flow parser tests", () => {
   // expectPrintedFlow(t, "class C {-p:T}\n", "class C {\n  p;\n}\n")
 
   // declare_class_properties
-  // expectPrintedFlow(t, "class C {\n  declare x: string;\n  declare static y: string;\n}\n", "class C {\n}\n")
-  // expectPrintedFlow(t, "class C {\n  declare x;\n}\n", "class C {\n}\n")
+  expectPrintedFlow(t, "class C {\n  declare x: string;\n  declare static y: string;\n}\n", "class C {\n}\n")
+  expectPrintedFlow(t, "class C {\n  declare x;\n}\n", "class C {\n}\n")
 
   // declare_class
   expectPrintedFlow(t, "declare class A {}\n", "")
-  // expectPrintedFlow(t, "declare class A { static : number }\n", "")
-  // expectPrintedFlow(t, "declare class A implements B {}\n", "")
-  // expectPrintedFlow(t, "declare class A mixins B implements C {}\n", "")
-  // expectPrintedFlow(t, "declare class A implements B, C {}\n", "")
-  // expectPrintedFlow(t, "declare class Foo {\n  m(): this;\n}\n", "")
-  // expectPrintedFlow(t, "declare class A mixins B {}\n", "")
-  // expectPrintedFlow(t, "declare class A mixins B, C {}\n", "")
-  // expectPrintedFlow(t, "declare class A {\n  proto: T;\n}\n\ndeclare class B {\n  proto x: T;\n}\n\ndeclare class C {\n  proto +x: T;\n}\n", "")
-  // expectPrintedFlow(t, "declare class A { static [ indexer: number]: string }\n", "")
-  // expectPrintedFlow(t, "declare class A { static () : number }\n", "")
+  expectPrintedFlow(t, "declare class A { static : number }\n", "")
+  expectPrintedFlow(t, "declare class A implements B {}\n", "")
+  expectPrintedFlow(t, "declare class A mixins B implements C {}\n", "")
+  expectPrintedFlow(t, "declare class A implements B, C {}\n", "")
+  expectPrintedFlow(t, "declare class Foo {\n  m(): this;\n}\n", "")
+  expectPrintedFlow(t, "declare class A mixins B {}\n", "")
+  expectPrintedFlow(t, "declare class A mixins B, C {}\n", "")
+  expectPrintedFlow(t, "declare class A {\n  proto: T;\n}\n\ndeclare class B {\n  proto x: T;\n}\n\ndeclare class C {\n  proto +x: T;\n}\n", "")
+  expectPrintedFlow(t, "declare class A { static [ indexer: number]: string }\n", "")
+  expectPrintedFlow(t, "declare class A { static () : number }\n", "")
 
   // declare_module
   expectPrintedFlow(t, "declare module A {}\n", "")
   expectPrintedFlow(t, "declare module \"./a/b.js\" {}\n", "")
-  // expectPrintedFlow(t, "declare module \"M\" { import type T from \"TM\"; }\n", "")
+  expectPrintedFlow(t, "declare module \"M\" { import type T from \"TM\"; }\n", "")
   expectPrintedFlow(t, "declare module A {}\ndeclare module B {}\n", "")
 
   // declare_interface
@@ -640,7 +640,7 @@ test("Ported Flow parser tests", () => {
   // expectPrintedFlow(t, "a={set fooProp(value:number){}}\n", "a = {\n  fooProp(value) {\n  }\n};\n")
   expectPrintedFlow(t, "var numVal:number;\n", "var numVal;\n")
   expectPrintedFlow(t, "var numVal:number = otherNumVal;\n", "var numVal = otherNumVal;\n")
-  // expectPrintedFlow(t, "var a: ?{numVal: number};\n", "var a;\n")
+  expectPrintedFlow(t, "var a: ?{numVal: number};\n", "var a;\n")
   expectPrintedFlow(t, "var a: {numVal: number};\n", "var a;\n")
   expectPrintedFlow(t, "var a: {numVal: number; [index: number]: string};\n", "var a;\n")
   expectPrintedFlow(t, "var a: {[index: number]: string; [index2: string]: number};\n", "var a;\n")
@@ -695,10 +695,10 @@ test("Ported Flow parser tests", () => {
   expectPrintedFlow(t, "type T = { a: | number | string }\n", "")
   expectPrintedFlow(t, "declare var x: symbol;\n", "")
   // expectPrintedFlow(t, "test<\n  _,\n  _,\n  number,\n  _,\n  _,\n>();\n", "test();\n")
-  // expectPrintedFlow(t, "test<number, _, string, _, _, _, Foo, Bar, Baz>();\n", "test();\n")
-  // expectPrintedFlow(t, "test<_>();\n", "test();\n")
-  // expectPrintedFlow(t, "new test<_>();\n", "new test();\n")
-  // expectPrintedFlow(t, "instance.method()<_>();\n", "instance.method()();\n")
+  expectPrintedFlow(t, "test<number, _, string, _, _, _, Foo, Bar, Baz>();\n", "test();\n")
+  expectPrintedFlow(t, "test<_>();\n", "test();\n")
+  expectPrintedFlow(t, "new test<_>();\n", "new test();\n")
+  expectPrintedFlow(t, "instance.method()<_>();\n", "instance.method()();\n")
 
   // declare_type_alias
   expectPrintedFlow(t, "declare type x = number;\n", "")
@@ -800,39 +800,39 @@ test("Ported Flow parser tests", () => {
   expectPrintedFlow(t, "type A = (Array<string>) => void\n", "")
   expectPrintedFlow(t, "type A = (Array<string>,) => void\n", "")
   expectPrintedFlow(t, "type A = (x: string, number) => void\n", "")
-  // expectPrintedFlow(t, "type A = (...Array<string>) => void\n", "")
-  // expectPrintedFlow(t, "type A = (Array<string>, ...Array<string>) => void\n", "")
+  expectPrintedFlow(t, "type A = (...Array<string>) => void\n", "")
+  expectPrintedFlow(t, "type A = (Array<string>, ...Array<string>) => void\n", "")
   // Non-anonymous function types are allowed as arrow function return types
-  // expectPrintedFlow(t, "var f = (x): (x: number) => 123 => 123;\n", "var f = (x) => 123;\n")
+  expectPrintedFlow(t, "var f = (x): (x: number) => 123 => 123;\n", "var f = (x) => 123;\n")
   // Anonymous function types are disallowed as arrow function return types
   // So the `=>` clearly belongs to the arrow function
-  // expectPrintedFlow(t, "var f = (): (number) => 123;\n", "var f = () => 123;\n")
-  // expectPrintedFlow(t, "var f = (): string | (number) => 123;\n", "var f = () => 123;\n")
+  expectPrintedFlow(t, "var f = (): (number) => 123;\n", "var f = () => 123;\n")
+  expectPrintedFlow(t, "var f = (): string | (number) => 123;\n", "var f = () => 123;\n")
   // You can write anonymous function types as arrow function return types
   // if you wrap them in parens
-  // expectPrintedFlow(t, "var f = (x): ((number) => 123) => 123;\n", "var f = (x) => 123;\n")
-  // expectPrintedFlow(t, "type A = string => void\n", "")
-  // expectPrintedFlow(t, "type A = Array<string> => void\n", "")
+  expectPrintedFlow(t, "var f = (x): ((number) => 123) => 123;\n", "var f = (x) => 123;\n")
+  expectPrintedFlow(t, "type A = string => void\n", "")
+  expectPrintedFlow(t, "type A = Array<string> => void\n", "")
   // Anonymous function types are disallowed as arrow function return types
   // So the `=>` clearly belongs to the arrow function
-  // expectPrintedFlow(t, "var f = (): number => 123;\n", "var f = () => 123;\n")
+  expectPrintedFlow(t, "var f = (): number => 123;\n", "var f = () => 123;\n")
   // Anonymous function types are disallowed as arrow function return types
   // So the `=>` clearly belongs to the arrow function
-  // expectPrintedFlow(t, "var f = (): string | number => 123;\n", "var f = () => 123;\n")
+  expectPrintedFlow(t, "var f = (): string | number => 123;\n", "var f = () => 123;\n")
   // You can write anonymous function types as arrow function return types
   // if you wrap them in parens
-  // expectPrintedFlow(t, "var f = (x): (number => 123) => 123;\n", "var f = (x) => 123;\n")
+  expectPrintedFlow(t, "var f = (x): (number => 123) => 123;\n", "var f = (x) => 123;\n")
   // string | (number => boolean)
-  // expectPrintedFlow(t, "type A = string | number => boolean;\n", "")
+  expectPrintedFlow(t, "type A = string | number => boolean;\n", "")
   // string & (number => boolean)
-  // expectPrintedFlow(t, "type A = string & number => boolean;\n", "")
+  expectPrintedFlow(t, "type A = string & number => boolean;\n", "")
   // (?number) => boolean
-  // expectPrintedFlow(t, "type A = ?number => boolean;\n", "")
+  expectPrintedFlow(t, "type A = ?number => boolean;\n", "")
   // (number[]) => boolean
-  // expectPrintedFlow(t, "type A = number[] => boolean;\n", "")
+  expectPrintedFlow(t, "type A = number[] => boolean;\n", "")
   // expectPrintedFlow(t, "type A = (string => boolean) => number\n", "")
   // string => (boolean | number)
-  // expectPrintedFlow(t, "type A = string => boolean | number;\n", "")
+  expectPrintedFlow(t, "type A = string => boolean | number;\n", "")
   // Becomes string => (boolean => number)
   // expectPrintedFlow(t, "type A = string => boolean => number;\n", "")
   expectPrintedFlow(t, "type T = (arg: string, number) => void\n", "")
