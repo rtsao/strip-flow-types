@@ -77,8 +77,8 @@ test("Ported Babel Flow tests", () => {
 
   // classes
   // expectPrintedFlow(t, "class C { field:*=null }\n", "class C {\n  field = null;\n}\n")
-  // expectPrintedFlow(t, "class A implements B {}\n", "class A {\n}\n")
-  // expectPrintedFlow(t, "class A implements B, C {}\n", "class A {\n}\n")
+  expectPrintedFlow(t, "class A implements B {}\n", "class A {\n}\n")
+  expectPrintedFlow(t, "class A implements B, C {}\n", "class A {\n}\n")
   // expectPrintedFlow(t, "class A {\n  constructor(): Object {\n    return {};\n  }\n}\n", "class A {\n  constructor() {\n    return {};\n  }\n}\n")
 
   // comment-disabled
@@ -181,16 +181,16 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "interface A extends B {}", "")
   expectPrintedFlow(t, "interface A<T> extends B<T>, C<T> {}", "")
   expectPrintedFlow(t, "interface Dictionary { [index: string]: string; length: number; }", "")
-  // expectPrintedFlow(t, "class Foo implements Bar {}", "class Foo {\n}\n")
+  expectPrintedFlow(t, "class Foo implements Bar {}", "class Foo {\n}\n")
   expectPrintedFlow(t, "interface A { foo: () => number; }", "")
-  // expectPrintedFlow(t, "class Foo extends Bar implements Bat, Man<number> {}", "class Foo extends Bar {\n}\n")
-  // expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} {}", "class Foo extends class Bar {\n} {\n}\n")
-  // expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} implements Man {}", "class Foo extends class Bar {\n} {\n}\n")
+  expectPrintedFlow(t, "class Foo extends Bar implements Bat, Man<number> {}", "class Foo extends Bar {\n}\n")
+  expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} {}", "class Foo extends class Bar {\n} {\n}\n")
+  expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} implements Man {}", "class Foo extends class Bar {\n} {\n}\n")
   expectPrintedFlow(t, "interface A { static(): number }\n", "")
   expectPrintedFlow(t, "interface switch {}\n", "")
   expectPrintedFlow(t, "interface B { static?: number }\n", "")
   // expectPrintedFlow(t, "interface Foo {}\n\nexport type { Foo }", "")
-  // expectPrintedFlow(t, "class Foo implements switch {}\n", "class Foo {\n}\n")
+  expectPrintedFlow(t, "class Foo implements switch {}\n", "class Foo {\n}\n")
 
   // internal-slot
   expectPrintedFlow(t, "declare class C { [[foo]]: T }\n", "")
@@ -855,17 +855,17 @@ test("Ported Flow parser tests", () => {
 
   // interfaces
   // ok, `implements` refers to types so reserved values are fine
-  // expectPrintedFlow(t, "class Foo implements switch {}\n", "class Foo {\n}\n")
+  expectPrintedFlow(t, "class Foo implements switch {}\n", "class Foo {\n}\n")
   expectPrintedFlow(t, "interface A {}\n", "")
   expectPrintedFlow(t, "interface A<T, S> {}\n", "")
   expectPrintedFlow(t, "interface A { foo: number; }\n", "")
   expectPrintedFlow(t, "interface A extends B {}\n", "")
   expectPrintedFlow(t, "interface A extends B, C {}\n", "")
   expectPrintedFlow(t, "interface A<T> extends B<T> {}\n", "")
-  // expectPrintedFlow(t, "class Foo implements Bar {}\n", "class Foo {\n}\n")
-  // expectPrintedFlow(t, "class Foo extends Bar implements Bat, Man<number> {}\n", "class Foo extends Bar {\n}\n")
-  // expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} {}\n", "class Foo extends class Bar {\n} {\n}\n")
-  // expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} implements Man {}\n", "class Foo extends class Bar {\n} {\n}\n")
+  expectPrintedFlow(t, "class Foo implements Bar {}\n", "class Foo {\n}\n")
+  expectPrintedFlow(t, "class Foo extends Bar implements Bat, Man<number> {}\n", "class Foo extends Bar {\n}\n")
+  expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} {}\n", "class Foo extends class Bar {\n} {\n}\n")
+  expectPrintedFlow(t, "class Foo extends class Bar implements Bat {} implements Man {}\n", "class Foo extends class Bar {\n} {\n}\n")
   expectPrintedFlow(t, "interface A {numVal: number; [index: number]: string};\n", ";\n")
   expectPrintedFlow(t, "interface A {[index: number]: string; [index2: string]: number};\n", ";\n")
   // OK: static is a valid identifier name
