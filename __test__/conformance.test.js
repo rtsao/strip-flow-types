@@ -56,16 +56,16 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "var a: number\n[]\n", "var a;\n[];\n")
 
   // class-private-property
-  // expectPrintedFlow(t, "class A {\n  #prop1: string;\n  #prop2: number = value;\n}", "class A {\n  #prop1;\n  #prop2 = value;\n}\n")
-  // expectPrintedFlow(t, "class A {\n  #prop1: string;\n  #prop2: number;\n}", "class A {\n  #prop1;\n  #prop2;\n}\n")
+  expectPrintedFlow(t, "class A {\n  #prop1: string;\n  #prop2: number = value;\n}", "class A {\n  #prop1;\n  #prop2 = value;\n}\n")
+  expectPrintedFlow(t, "class A {\n  #prop1: string;\n  #prop2: number;\n}", "class A {\n  #prop1;\n  #prop2;\n}\n")
   // expectPrintedFlow(t, "class A {\n  declare #foo\n}\n", "class A {\n  #foo;\n}\n")
 
   // comment
-  // expectPrintedFlow(t, "class MyClass {\n  /*   :: prop: string; */\n    /*   :: prop2: number; */\n}\n", "class MyClass {\n  prop;\n  prop2;\n}\n")
+  expectPrintedFlow(t, "class MyClass {\n  /*   :: prop: string; */\n    /*   :: prop2: number; */\n}\n", "class MyClass {\n  prop;\n  prop2;\n}\n")
   expectPrintedFlow(t, "/*::\ntype Foo = {\n  foo: number,\n  bar: boolean,\n  baz: string\n};\n*/\n", "")
   expectPrintedFlow(t, "/* flow-include\ntype Foo = {\n  foo: number,\n  bar: boolean,\n  baz: string\n};\n*/\n", "")
   expectPrintedFlow(t, "function method(param /*: string */) /*: number */ {\n}\n", "function method(param) {\n}\n")
-  // expectPrintedFlow(t, "class MyClass {\n  /*      flow-include prop: string; */\n      /*   flow-include prop2: number; */\n}\n", "class MyClass {\n  prop;\n  prop2;\n}\n")
+  expectPrintedFlow(t, "class MyClass {\n  /*      flow-include prop: string; */\n      /*   flow-include prop2: number; */\n}\n", "class MyClass {\n  prop;\n  prop2;\n}\n")
   expectPrintedFlow(t, "/* hi */\nfunction commentsAttachedToIdentifier() {\n  var x = (...args: any) => {};\n}\n", "function commentsAttachedToIdentifier() {\n  var x = (...args) => {\n  };\n}\n")
 
   // call-properties
@@ -76,10 +76,10 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "var a : { (): number; y: string; (x: string): string }", "var a;\n")
 
   // classes
-  // expectPrintedFlow(t, "class C { field:*=null }\n", "class C {\n  field = null;\n}\n")
+  expectPrintedFlow(t, "class C { field:*=null }\n", "class C {\n  field = null;\n}\n")
   expectPrintedFlow(t, "class A implements B {}\n", "class A {\n}\n")
   expectPrintedFlow(t, "class A implements B, C {}\n", "class A {\n}\n")
-  // expectPrintedFlow(t, "class A {\n  constructor(): Object {\n    return {};\n  }\n}\n", "class A {\n  constructor() {\n    return {};\n  }\n}\n")
+  expectPrintedFlow(t, "class A {\n  constructor(): Object {\n    return {};\n  }\n}\n", "class A {\n  constructor() {\n    return {};\n  }\n}\n")
 
   // comment-disabled
   expectPrintedFlow(t, "class MyClass {\n  /*:: prop: string; */\n  /*    :: foo: number; */\n}\n", "class MyClass {\n}\n")
@@ -247,7 +247,7 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "'use strict';\n// @flow\nfoo<x>(y);", "\"use strict\";\nfoo(y);\n")
   expectPrintedFlow(t, "// arbitrary comment\n// @flow\nfoo<x>(y);", "foo(y);\n")
   expectPrintedFlow(t, "'use strict';\n// arbitrary comment\n// @flow\nfoo<x>(y);", "\"use strict\";\nfoo(y);\n")
-  // expectPrintedFlow(t, "#!/usr/bin/env node\n'use strict';\n// arbitrary comment\n// @flow\nfoo<x>(y);", "#!/usr/bin/env node\n\"use strict\";\nfoo(y);\n")
+  expectPrintedFlow(t, "#!/usr/bin/env node\n'use strict';\n// arbitrary comment\n// @flow\nfoo<x>(y);", "#!/usr/bin/env node\n\"use strict\";\nfoo(y);\n")
 
   // optional-type
   // expectPrintedFlow(t, "const f = (x?) => {}\n", "const f = (x) => {\n};\n")
@@ -353,13 +353,13 @@ test("Ported Babel Flow tests", () => {
 
   // type-parameter-declaration
   expectPrintedFlow(t, "<T>() => 123;\n<T>(x) => 123;\n<T>(x: number) => 123;\n<T>(x: number) => { 123 };\n\n", "() => 123;\n(x) => 123;\n(x) => 123;\n(x) => {\n  123;\n};\n")
-  // expectPrintedFlow(t, "class X {\n  foobar<T>() {}\n  delete<T>() {}\n  yield<T>() {}\n  do<T>() {}\n  static foobar<T>() {}\n  static delete<T>() {}\n  static yield<T>() {}\n  static do<T>() {}\n};\n", "class X {\n  foobar() {\n  }\n  delete() {\n  }\n  yield() {\n  }\n  do() {\n  }\n  static foobar() {\n  }\n  static delete() {\n  }\n  static yield() {\n  }\n  static do() {\n  }\n}\n;\n")
+  expectPrintedFlow(t, "class X {\n  foobar<T>() {}\n  delete<T>() {}\n  yield<T>() {}\n  do<T>() {}\n  static foobar<T>() {}\n  static delete<T>() {}\n  static yield<T>() {}\n  static do<T>() {}\n};\n", "class X {\n  foobar() {\n  }\n  delete() {\n  }\n  yield() {\n  }\n  do() {\n  }\n  static foobar() {\n  }\n  static delete() {\n  }\n  static yield() {\n  }\n  static do() {\n  }\n}\n;\n")
   expectPrintedFlow(t, "<T>() => 123;\n<T>(x) => 123;\n<T>(x: number) => 123;\n<T>(x: number) => { 123 };\n\n", "() => 123;\n(x) => 123;\n(x) => 123;\n(x) => {\n  123;\n};\n")
-  // expectPrintedFlow(t, "declare class X {\n  foobar<T>(): void;\n  delete<T>(): void;\n  yield<T>(): void;\n  do<T>(): void;\n  static foobar<T>(): void;\n  static delete<T>(): void;\n  static yield<T>(): void;\n  static do<T>(): void;\n};\n", ";\n")
+  expectPrintedFlow(t, "declare class X {\n  foobar<T>(): void;\n  delete<T>(): void;\n  yield<T>(): void;\n  do<T>(): void;\n  static foobar<T>(): void;\n  static delete<T>(): void;\n  static yield<T>(): void;\n  static do<T>(): void;\n};\n", ";\n")
   expectPrintedFlow(t, "declare interface X {\n  foobar<T>(): void;\n  delete<T>(): void;\n  yield<T>(): void;\n  do<T>(): void;\n};\n", ";\n")
-  // expectPrintedFlow(t, "type A1<T = string> = T\ntype A2<T = *> = T\ntype A3<T: ?string = string> = T\ntype A4<S, T: ?string = string> = T\ntype A5<S = number, T: ?string = string> = T\nclass A6<T = string> {}\nclass A7<T: ?string = string> {}\nclass A8<S, T: ?string = string> {}\nclass A9<S = number, T: ?string = string> {}\n;(class A10<T = string> {})\n;(class A11<T: ?string = string> {})\n;(class A12<S, T: ?string = string> {})\n;(class A13<S = number, T: ?string = string> {})\ndeclare class A14<T = string> {}\ndeclare class A15<T: ?string = string> {}\ndeclare class A16<S, T: ?string = string> {}\ndeclare class A17<S = number, T: ?string = string> {}\ninterface A18<T = string> {}\ninterface A19<T: ?string = string> {}\ninterface A20<S, T: ?string = string> {}\ninterface A21<S = number, T: ?string = string> {}\ntype A22<T = void> = T\nfunction A26<T = string>() {}\n;({ A28<T = string>() {} });\nclass A29 {\n  foo<T = string>() {}\n}\n;(class A30 {\n  foo<T = string>() {}\n});\ndeclare class A31 { foo<T = string>(): void }\n<T = string>() => 123;", "class A6 {\n}\nclass A7 {\n}\nclass A8 {\n}\nclass A9 {\n}\n;\n(class A10 {\n});\n(class A11 {\n});\n(class A12 {\n});\n(class A13 {\n});\nfunction A26() {\n}\n;\n({\n  A28() {\n  }\n});\nclass A29 {\n  foo() {\n  }\n}\n;\n(class A30 {\n  foo() {\n  }\n});\n() => 123;\n")
+  expectPrintedFlow(t, "type A1<T = string> = T\ntype A2<T = *> = T\ntype A3<T: ?string = string> = T\ntype A4<S, T: ?string = string> = T\ntype A5<S = number, T: ?string = string> = T\nclass A6<T = string> {}\nclass A7<T: ?string = string> {}\nclass A8<S, T: ?string = string> {}\nclass A9<S = number, T: ?string = string> {}\n;(class A10<T = string> {})\n;(class A11<T: ?string = string> {})\n;(class A12<S, T: ?string = string> {})\n;(class A13<S = number, T: ?string = string> {})\ndeclare class A14<T = string> {}\ndeclare class A15<T: ?string = string> {}\ndeclare class A16<S, T: ?string = string> {}\ndeclare class A17<S = number, T: ?string = string> {}\ninterface A18<T = string> {}\ninterface A19<T: ?string = string> {}\ninterface A20<S, T: ?string = string> {}\ninterface A21<S = number, T: ?string = string> {}\ntype A22<T = void> = T\nfunction A26<T = string>() {}\n;({ A28<T = string>() {} });\nclass A29 {\n  foo<T = string>() {}\n}\n;(class A30 {\n  foo<T = string>() {}\n});\ndeclare class A31 { foo<T = string>(): void }\n<T = string>() => 123;", "class A6 {\n}\nclass A7 {\n}\nclass A8 {\n}\nclass A9 {\n}\n;\n(class A10 {\n});\n(class A11 {\n});\n(class A12 {\n});\n(class A13 {\n});\nfunction A26() {\n}\n;\n({\n  A28() {\n  }\n});\nclass A29 {\n  foo() {\n  }\n}\n;\n(class A30 {\n  foo() {\n  }\n});\n() => 123;\n")
   expectPrintedFlow(t, "interface X {\n  foobar<T>(): void;\n  delete<T>(): void;\n  yield<T>(): void;\n  do<T>(): void;\n};\n", ";\n")
-  // expectPrintedFlow(t, "const x = {\n  foobar<T>() {},\n  delete<T>() {},\n  yield<T>() {},\n  do<T>() {},\n};\n", "const x = {\n  foobar() {\n  },\n  delete() {\n  },\n  yield() {\n  },\n  do() {\n  }\n};\n")
+  expectPrintedFlow(t, "const x = {\n  foobar<T>() {},\n  delete<T>() {},\n  yield<T>() {},\n  do<T>() {},\n};\n", "const x = {\n  foobar() {\n  },\n  delete() {\n  },\n  yield() {\n  },\n  do() {\n  }\n};\n")
   // expectPrintedFlow(t, "const s = {\n  delete<T>(d = <Foo />) {},\n}\n", "const s = {\n  delete(d = /* @__PURE__ */ React.createElement(Foo, null)) {\n  }\n};\n")
   expectPrintedFlow(t, "type X = {\n  foobar<T>(): void;\n  delete<T>(): void;\n  yield<T>(): void;\n  do<T>(): void;\n};\n", "")
 
@@ -773,14 +773,14 @@ test("Ported Flow parser tests", () => {
 
   // import_types
   // ok, because `switch` is not a reserved type name
-  // expectPrintedFlow(t, "import type switch from 'foo';\n", "")
+  expectPrintedFlow(t, "import type switch from 'foo';\n", "")
   // ok, reserved words are not reserved types
   expectPrintedFlow(t, "import type { switch } from 'foo';\n", "")
   // ok, `string` is a reserved type but it's renamed
   // expectPrintedFlow(t, "import typeof { string as StringT } from 'foo';\n", "")
 
   // import_type_shorthand
-  // expectPrintedFlow(t, "import {type} from \"foo\";\n", "import {type} from \"foo\";\n") // FIXME
+  expectPrintedFlow(t, "import {type} from \"foo\";\n", "import {type} from \"foo\";\n")
   expectPrintedFlow(t, "import {type t} from \"foo\";\n", "")
   // expectPrintedFlow(t, "import {type as} from \"foo\";\n", "") // FIXME PANIC
   expectPrintedFlow(t, "import {type t as u} from \"foo\";\n", "")
