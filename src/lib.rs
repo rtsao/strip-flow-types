@@ -28,6 +28,7 @@ fn walk_tree(cursor: &mut TreeCursor, bytes: &mut [u8]) {
       "type_alias_declaration"
       | "type_parameters"
       | "type_parameter"
+      | "type_arguments"
       | "type_annotation"
       | "ambient_declaration"
       | "interface_declaration"
