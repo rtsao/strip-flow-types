@@ -14,7 +14,7 @@ test("whitespace preservation", () => {
     const baz: number = 24;
     return foobar;
   };
-  
+
   `)
   ).toMatchInlineSnapshot(`
     "
@@ -24,7 +24,7 @@ test("whitespace preservation", () => {
         const baz         = 24;
         return foobar;
       };
-      
+
       "
   `);
 
@@ -32,14 +32,14 @@ test("whitespace preservation", () => {
     transform(`declare class URL {
     constructor(urlStr: string): URL;
     toString(): string;
-  
+
     static compare(url1: URL, url2: URL): boolean;
   }`)
   ).toMatchInlineSnapshot(`
     "                   
                                          
                            
-      
+
                                                       
        "
   `);
@@ -87,5 +87,13 @@ test("whitespace preservation", () => {
   expect(
     transform(`export {type baz} from "bar";`)
   ).toMatchInlineSnapshot('"                             "');
+
+  expect(
+    transform(`function foo(a?) {}`)
+  ).toMatchInlineSnapshot('"function foo(a ) {}"');
+
+  expect(
+    transform(`function foo(a?: number) {}`)
+  ).toMatchInlineSnapshot('"function foo(a         ) {}"');
 
 });

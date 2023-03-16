@@ -242,6 +242,25 @@ fn walk_tree(cursor: &mut TreeCursor, bytes: &mut [u8]) {
           continue;
         }
       }
+      "optional_parameter" => {
+        match node.child(0) {
+          Some(child) => {
+            // ...
+            match child.kind() {
+              "identifier" | "rest_pattern" => {
+                replace_byte_range(bytes, child.end_byte(), node.end_byte());
+              }
+              _ => {}
+            }
+          }
+          _ => {}
+        }
+
+        if cursor.goto_first_child() {
+          // If not a type related node, keep travelling down the tree as far as we can
+          continue;
+        }
+      }
       _ => {
         if cursor.goto_first_child() {
           // If not a type related node, keep travelling down the tree as far as we can

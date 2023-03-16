@@ -250,9 +250,9 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "#!/usr/bin/env node\n'use strict';\n// arbitrary comment\n// @flow\nfoo<x>(y);", "#!/usr/bin/env node\n\"use strict\";\nfoo(y);\n")
 
   // optional-type
-  // expectPrintedFlow(t, "const f = (x?) => {}\n", "const f = (x) => {\n};\n")
-  // expectPrintedFlow(t, "const f = (x?, y?:Object = {}) => {}\n", "const f = (x, y = {}) => {\n};\n")
-  // expectPrintedFlow(t, "const f = (...x?) => {}\n", "const f = (...x) => {\n};\n")
+  expectPrintedFlow(t, "const f = (x?) => {}\n", "const f = (x) => {\n};\n")
+  expectPrintedFlow(t, "const f = (x?, y?:Object = {}) => {}\n", "const f = (x, y = {}) => {\n};\n")
+  expectPrintedFlow(t, "const f = (...x?) => {}\n", "const f = (...x) => {\n};\n")
 
   // predicates
   // expectPrintedFlow(t, "declare function foo(x: mixed): boolean %checks(x !== null);\n", "")
@@ -310,7 +310,7 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "let hello = (greeting:string = ' world') : string => {\n  console.log('hello' + greeting);\n};\n\nhello();\n", "let hello = (greeting = \" world\") => {\n  console.log(\"hello\" + greeting);\n};\nhello();\n")
   expectPrintedFlow(t, "const fn: ( Object, ?Object ) => void = ( o1, o2 ) => o1;\nconst fn2: ( Object, ?Object, ) => void = ( o1, o2, ) => o1;\n", "const fn = (o1, o2) => o1;\nconst fn2 = (o1, o2) => o1;\n")
   expectPrintedFlow(t, "const map = {\n  [age <= 17] : 'Too young'\n};\n", "const map = {\n  [age <= 17]: \"Too young\"\n};\n")
-  // expectPrintedFlow(t, "const fn = async (a?: any): Promise<void> => {};\n", "const fn = async (a) => {\n};\n")
+  expectPrintedFlow(t, "const fn = async (a?: any): Promise<void> => {};\n", "const fn = async (a) => {\n};\n")
   // expectPrintedFlow(t, "// Valid lhs value inside parentheses\na ? (b) : c => d; // a ? b : (c => d)\na ? (b) : c => d : e; // a ? ((b): c => d) : e\na ? (b) : (c) : d => e; // a ? b : ((c): d => e)\n\n// Nested arrow function inside parentheses\na ? (b = (c) => d) : e => f; // a ? (b = (c) => d) : (e => f)\na ? (b = (c) => d) : e => f : g; // a ? ((b = (c) => d): e => f) : g\n\n// Nested conditional expressions\n    b ? c ? (d) : e => (f) : g : h; // b ? (c ? ((d): e => f) : g) : h\na ? b ? c ? (d) : e => (f) : g : h; // a ? (b ? (c ? d : (e => f)) : g) : h\n\na ? b ? (c) : (d) : (e) => f : g; // a ? (b ? c : ((d): e => f)) : g\n\n// Multiple arrow functions\na ? (b) : c => d : (e) : f => g; // a ? ((b): c => d) : ((e): f => g)\n\n// Multiple nested arrow functions (<T> is needed to avoid ambiguities)\na ? (b) : c => (d) : e => f : g; // a ? ((b): c => ((d): e => f)) : g\na ? (b) : c => <T>(d) : e => f; // a ? b : (c => (<T>(d): e => f))\na ? <T>(b) : c => (d) : e => f; // a ? (<T>(b): c => d) : (e => f)\n\n// Invalid lhs value inside parentheses\na ? (b => c) : d => e; // a ? (b => c) : (d => e)\na ? b ? (c => d) : e => f : g; // a ? (b ? (c => d) : (e => f)) : g\n\n// Invalid lhs value inside parentheses inside arrow function\na ? (b) : c => (d => e) : f => g; // a ? ((b): c => (d => e)) : (f => g)\na ? b ? (c => d) : e => (f => g) : h => i; // a ? (b ? (c => d) : (e => (f => g))) : (h => i)\n\n// Function as type annotation\na ? (b) : (c => d) => e : f; // a ? ((b): (c => d) => e) : f\n\n// Async functions or calls\na ? async (b) : c => d; // a ? (async(b)) : (c => d)\na ? async (b) : c => d : e; // a ? (async (b): c => d) : e\na ? async (b => c) : d => e; // a ? (async(b => c)) : (d => e)\na ? async (b) => (c => d) : e => f; // a ? (async (b) => c => d) : (e => f)\n\n// https://github.com/prettier/prettier/issues/2194\nlet icecream = what == \"cone\"\n  ? p => (!!p ? `here's your ${p} cone` : `just the empty cone for you`)\n  : p => `here's your ${p} ${what}`;\n", "a ? b : (c2) => d;\na ? (b2) => d : e;\na ? b : (c2) => e;\na ? b = (c2) => d : (e2) => f;\na ? (b2 = (c2) => d) => f : g;\nb ? c ? (d2) => f : g : h;\na ? b ? c ? d : (e2) => f : g : h;\na ? b ? c : (d2) => f : g;\na ? (b2) => d : (e2) => g;\na ? (b2) => (d2) => f : g;\na ? b : (c2) => (d2) => f;\na ? (b2) => d : (e2) => f;\na ? (b2) => c : (d2) => e;\na ? b ? (c2) => d : (e2) => f : g;\na ? (b2) => (d2) => e : (f2) => g;\na ? b ? (c2) => d : (e2) => (f2) => g : (h2) => i;\na ? (b2) => e : f;\na ? async(b) : (c2) => d;\na ? async (b2) => d : e;\na ? async((b2) => c) : (d2) => e;\na ? async (b2) => (c2) => d : (e2) => f;\nlet icecream = what == \"cone\" ? (p) => !!p ? `here's your ${p} cone` : `just the empty cone for you` : (p) => `here's your ${p} ${what}`;\n")
   // expectPrintedFlow(t, "const fail = (): X => <x />;", "const fail = () => /* @__PURE__ */ React.createElement(\"x\", null);\n")
   expectPrintedFlow(t, "const a = async (foo: string = \"\") => {}\n", "const a = async (foo = \"\") => {\n};\n")
@@ -336,7 +336,7 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "async <T>(fn: () => T) => fn;", "async (fn) => fn;\n")
   expectPrintedFlow(t, "const f = async <T, R, S>(\n  x: T,\n  y: R,\n  z: S,\n) => {\n  return null;\n};\n", "const f = async (x, y, z) => {\n  return null;\n};\n")
   // expectPrintedFlow(t, "async <T>(fn: () => T);\n\n// This looks A LOT like an async arrow function, but it isn't because\n// T + U isn't a valid type parameter.\n(async <T + U>(fn: T): T => fn);\n", "async < T > fn;\nasync < T + U > fn;\n")
-  // expectPrintedFlow(t, "async (...args?: any) => {};", "async (...args) => {\n};\n")
+  expectPrintedFlow(t, "async (...args?: any) => {};", "async (...args) => {\n};\n")
   expectPrintedFlow(t, "async (...args: any) => {};", "async (...args) => {\n};\n")
   // expectPrintedFlow(t, "let child: Element<any> = <img src={url} key=\"img\" />;\n", "let child = /* @__PURE__ */ React.createElement(\"img\", {\n  src: url,\n  key: \"img\"\n});\n")
 
@@ -466,7 +466,7 @@ test("Ported Babel Flow tests", () => {
   expectPrintedFlow(t, "class Foo { \"bar\"<T>() { } }", "class Foo {\n  bar() {\n  }\n}\n")
   expectPrintedFlow(t, "class Foo<T> { bar<U>():number { return 42; }}", "class Foo {\n  bar() {\n    return 42;\n  }\n}\n")
   expectPrintedFlow(t, "function foo(untypedVal, numVal: number){}", "function foo(untypedVal, numVal) {\n}\n")
-  // expectPrintedFlow(t, "function foo(requiredParam, optParam?) {}", "function foo(requiredParam, optParam) {\n}\n")
+  expectPrintedFlow(t, "function foo(requiredParam, optParam?) {}", "function foo(requiredParam, optParam) {\n}\n")
   // expectPrintedFlow(t, "class Foo { static prop1:string; prop2:number; }", "class Foo {\n  static prop1;\n  prop2;\n}\n")
   // expectPrintedFlow(t, "class Foo { prop1:string; prop2:number; }", "class Foo {\n  prop1;\n  prop2;\n}\n")
   expectPrintedFlow(t, "var x : number | string = 4;", "var x = 4;\n")
@@ -655,7 +655,7 @@ test("Ported Flow parser tests", () => {
   expectPrintedFlow(t, "var a:(...rest:Array<number>) => number\n", "var a;\n")
   expectPrintedFlow(t, "var bar: (str:number, i:number)=> string = foo;\n", "var bar = foo;\n")
   expectPrintedFlow(t, "var a:Array<number> = [1, 2, 3]\n", "var a = [1, 2, 3];\n")
-  // expectPrintedFlow(t, "function foo(requiredParam, optParam?) {}\n", "function foo(requiredParam, optParam) {\n}\n")
+  expectPrintedFlow(t, "function foo(requiredParam, optParam?) {}\n", "function foo(requiredParam, optParam) {\n}\n")
   // expectPrintedFlow(t, "function foo(requiredParam, optParam?=123) {}\n", "function foo(requiredParam, optParam = 123) {\n}\n")
   // expectPrintedFlow(t, "class Foo {set fooProp(value:number){}}\n", "class Foo {\n  set fooProp(value) {\n  }\n}\n")
   expectPrintedFlow(t, "a = class Foo<T> { }\n", "a = class Foo {\n};\n")
