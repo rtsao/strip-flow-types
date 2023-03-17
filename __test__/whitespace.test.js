@@ -73,6 +73,10 @@ test("whitespace preservation", () => {
   ).toMatchInlineSnapshot('"import {          baz} from \\"bar\\";"');
 
   expect(
+    transform(`import abc, {foo, type baz} from "bar";`)
+  ).toMatchInlineSnapshot('"import abc, {foo          } from \\"bar\\";"');
+
+  expect(
     transform(`export type {foo, baz} from "bar";`)
   ).toMatchInlineSnapshot('"                                  "');
 

@@ -56,14 +56,19 @@ fn walk_tree(cursor: &mut TreeCursor, bytes: &mut [u8]) {
               }
               ("import_clause", _, _) => {
                 let mut maybe_named_imports = None;
-                match (child1.child(0), child1.child(1)) {
-                  (Some(node0), Some(node1)) => match (node0.kind(), node1.kind()) {
-                    (_, "named_imports") => {
-                      maybe_named_imports = Some(node1);
+                match (child1.child(0), child1.child(1), child1.child(2)) {
+                  (Some(node0), Some(node1), Some(node2)) => {
+                    match (node0.kind(), node1.kind(), node2.kind()) {
+                      (_, "named_imports", _) => {
+                        maybe_named_imports = Some(node1);
+                      }
+                      (_, _, "named_imports") => {
+                        maybe_named_imports = Some(node2);
+                      }
+                      _ => {}
                     }
-                    _ => {}
-                  },
-                  (Some(node0), None) => match node0.kind() {
+                  }
+                  (Some(node0), _, _) => match node0.kind() {
                     "named_imports" => {
                       maybe_named_imports = Some(node0);
                     }
