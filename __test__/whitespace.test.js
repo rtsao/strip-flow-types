@@ -100,4 +100,37 @@ test("whitespace preservation", () => {
     transform(`function foo(a?: number) {}`)
   ).toMatchInlineSnapshot('"function foo(a         ) {}"');
 
+  expect(
+    transform(`export type { foo, bar };`)
+  ).toMatchInlineSnapshot('"                         "');
+
+  expect(
+    transform(`export type foo = {
+      bar: ([foo, foo]) => [bar, bar]
+    };`)
+  ).toMatchInlineSnapshot(`
+    "                   
+                                         
+          "
+  `);
+});
+
+// tree-sitter-typescript does not correctly parse this syntax
+test.fails("failing: ?(T) => T syntax", () => {
+  expect(
+    transform(`function normalizeProvider(provider: mixed, onError: ?(MapsSDKErrorEvent) => mixed): Provider {};`)
+  ).toMatchInlineSnapshot('"function normalizeProvider(provider       , onError                               )           {};"');
+});
+
+// The error recovery mechanism of tree-sitter tolerates this TS syntax error, but a sufficiently long arrow functon will no longer parse as type_alias_declaration
+test.fails("failing: export type assignment with sufficiently long arrow function", () => {
+  expect(
+    transform(`export type foo = {
+      bar: ([number, number]) => [number, number]
+    };`)
+  ).toMatchInlineSnapshot(`
+    "                   
+                                                     
+          "
+  `);
 });
