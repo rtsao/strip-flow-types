@@ -163,7 +163,7 @@ fn walk_tree(cursor: &mut TreeCursor, bytes: &mut [u8]) {
               ("interface_declaration", _, _) => {
                 should_prune = true;
               }
-              ("type", "export_clause", "from") => {
+              ("type", "export_clause", _) => {
                 should_prune = true;
               }
               ("export_clause", _, _) => {
