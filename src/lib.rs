@@ -30,6 +30,7 @@ fn walk_tree(cursor: &mut TreeCursor, bytes: &mut [u8]) {
       | "type_parameter"
       | "type_arguments"
       | "type_annotation"
+      | "flow_maybe_type"
       | "ambient_declaration"
       | "interface_declaration"
       | "implements_clause"
